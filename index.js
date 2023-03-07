@@ -129,7 +129,7 @@ const startServer = async () => {
   });
 };
 
-if (process.env.NODE_ENV === 'production') {
+
    //Set Static folder
   app.use(express.static('client/dist'));
   
@@ -137,6 +137,5 @@ if (process.env.NODE_ENV === 'production') {
       res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'));
   })
    
-}
 
 startServer();
