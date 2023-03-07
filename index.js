@@ -16,12 +16,13 @@ app.use(express.json());
 app.use(cookieParser());
 
 // allow access to React app domain
-app.use(
-  cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-  })
-);
+  app.use(
+    cors({
+      origin: `http://localhost:${process.env.PORT || 3000};`,
+      credentials: true,
+    })
+  );
+
 
 const config = {
   domain: process.env.APP_DOMAIN,
@@ -104,9 +105,10 @@ app.get('/logout', async (req, res) => {
 });
 
 app.post('/generator', async (req, res) => {
+  console.log(req.body)
   try {
     const response = await openai.createImage({
-      prompt: req.body.prompt,
+      prompt: "test",
       n: 1,
       size: "256x256",
     })
@@ -127,14 +129,14 @@ const startServer = async () => {
   });
 };
 
-// Server static assets if in production
-if(process.env.NODE_ENV === 'production') {
-        //Set Static folder
-        app.use(express.static('client/build'));
-        
-        app.get('*', (req, res) => {
-                res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-        })
-
+if (process.env.NODE_ENV === 'production') {
+   //Set Static folder
+  app.use(express.static('client/dist'));
+  
+  app.get('*', (req, res) => {
+      res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'));
+  })
+   
 }
+
 startServer();
