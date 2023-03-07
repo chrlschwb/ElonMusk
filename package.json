@@ -1,0 +1,35 @@
+{
+  "name": "mcpepes",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "charilscah <chrlschwb77@gmail.com>",
+  "types": "module",
+  "scripts": {
+    "client-install": "cd client && yarn",
+    "client": "cd client && yarn dev",
+    "start": "node index.js",
+    "server": "nodemon index.js",
+    "dev": " concurrently \"yarn server\" \"yarn client\""
+  },
+  "license": "MIT",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "moralis": "^2.14.3",
+    "openai": "^3.2.1"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.21"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/client/**",
+      "**/docs/**"
+    ],
+    "delay": 2500
+  }
+}
