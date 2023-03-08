@@ -4,10 +4,12 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
-const { Configuration, OpenAIApi } = require("openai")
+const path = require("path");
+
+const { Configuration, OpenAIApi } = require("openai");
 
 // to use our .env variables
-require('dotenv').config();
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
