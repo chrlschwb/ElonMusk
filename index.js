@@ -1,9 +1,9 @@
-const Moralis = require('moralis').default;
+const Moralis = require("moralis").default;
 
-const express = require('express');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const jwt = require('jsonwebtoken');
+const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 const path = require("path");
 
 const { Configuration, OpenAIApi } = require("openai");
@@ -105,6 +105,7 @@ app.get("/logout", async (req, res) => {
 });
 
 app.post("/generator", async (req, res) => {
+  console.log(req.body.prompt);
   try {
     const response = await openai.createImage({
       prompt: req.body.prompt,
