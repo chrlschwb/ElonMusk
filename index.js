@@ -16,17 +16,16 @@ app.use(express.json());
 app.use(cookieParser());
 
 // allow access to React app domain
-  app.use(
-    cors({
-      origin: `http://localhost:${process.env.PORT || 3000};`,
-      credentials: true,
-    })
-  );
-
+app.use(
+  cors({
+    origin: `http://localhost:${process.env.PORT || 3000}`,
+    credentials: true,
+  })
+);
 
 const config = {
   domain: process.env.APP_DOMAIN,
-  statement: 'Please sign this message to confirm your identity.',
+  statement: "Please sign this message to confirm your identity.",
   uri: process.env.REACT_URL,
   timeout: 60,
 };
@@ -37,7 +36,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 // request message to be signed by client
-app.post('/request-message', async (req, res) => {
+app.post("/request-message", async (req, res) => {
   const { address, chain, network } = req.body;
   try {
     const message = await Moralis.Auth.requestMessage({
@@ -54,8 +53,7 @@ app.post('/request-message', async (req, res) => {
   }
 });
 
-app.post('/verify', async (req, res) => {
-
+app.post("/verify", async (req, res) => {
   try {
     const { message, signature } = req.body;
 
@@ -63,7 +61,7 @@ app.post('/verify', async (req, res) => {
       await Moralis.Auth.verify({
         message,
         signature,
-        networkType: 'evm',
+        networkType: "evm",
       })
     ).raw;
 
@@ -73,7 +71,7 @@ app.post('/verify', async (req, res) => {
     const token = jwt.sign(user, process.env.AUTH_SECRET);
 
     // set JWT cookie
-    res.cookie('jwt', token, {
+    res.cookie("jwt", token, {
       httpOnly: true,
     });
 
@@ -84,7 +82,7 @@ app.post('/verify', async (req, res) => {
   }
 });
 
-app.get('/authenticate', async (req, res) => {
+app.get("/authenticate", async (req, res) => {
   const token = req.cookies.jwt;
   if (!token) return res.sendStatus(403); // if the user did not send a jwt token, they are unauthorized
   try {
@@ -95,23 +93,22 @@ app.get('/authenticate', async (req, res) => {
   }
 });
 
-app.get('/logout', async (req, res) => {
+app.get("/logout", async (req, res) => {
   try {
-    res.clearCookie('jwt');
+    res.clearCookie("jwt");
     return res.sendStatus(200);
   } catch {
     return res.sendStatus(403);
   }
 });
 
-app.post('/generator', async (req, res) => {
-  console.log(req.body)
+app.post("/generator", async (req, res) => {
   try {
     const response = await openai.createImage({
-      prompt: "test",
+      prompt: req.body.prompt,
       n: 1,
       size: "256x256",
-    })
+    });
     const image_url = response.data.data[0].url;
     return res.json(image_url);
   } catch (error) {
@@ -129,13 +126,13 @@ const startServer = async () => {
   });
 };
 
+if (process.env.NODE_ENV === "production") {
+  //Set Static folder
+  app.use(express.static("client/dist"));
 
-//Set Static folder
-app.use(express.static('client/dist'));
-
-app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'));
-})
-   
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
+  });
+}
 
 startServer();
