@@ -119,27 +119,26 @@ app.post("/generator", async (req, res) => {
       steps: 25,
       cfgScale: 7.5,
       prompt: req.body.prompt,
-      style: "fantasy",
+      style: "game loading screen",
       layout: "square",
     })
     .then(({ data }) => {
-      console.log(data);
+      const id = data.orderId;
       try {
-        sdk
-          .aiArtGetOrder({ id })
-          .then(({ data }) => {
-            console.log(data);
-            const image_url = data.output[0].preview;
-            console.log(image_url);
-            res.json(image_url);
-          })
-          .catch((err) => console.error(err));
+        setTimeout(() => {
+          sdk
+            .aiArtGetOrder({ id })
+            .then(({ data }) => {
+              const image_url = data.output[0].preview;
+              res.json(image_url);
+            })
+            .catch((err) => console.error(err));
+        }, 60000);
       } catch (error) {
         console.log(error);
       }
     })
     .catch((err) => {
-      console.error(err);
       res.status(400).json(error);
     });
 });
