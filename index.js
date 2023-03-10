@@ -105,31 +105,43 @@ app.get("/logout", async (req, res) => {
   }
 });
 
+const sdk = require("api")("@neural-love/v1.0#1dfatt1vlesesd6t");
+
 app.post("/generator", async (req, res) => {
   console.log(req.body.prompt);
-  try {
-    const response = await axios({
-      method: "POST",
-      url: "https://api.openai.com/v1/images/generations",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_KEY}`,
-      },
-      data: {
-        model: "image-alpha-001",
-        prompt: req.body.prompt,
-        num_images: 1,
-        size: "256x256",
-      },
+  sdk.auth(process.env.NEURAL_LOVE_KEY);
+  sdk
+    .aiArtGenerate({
+      amount: 1,
+      isPublic: true,
+      isPriority: false,
+      isHd: false,
+      steps: 25,
+      cfgScale: 7.5,
+      prompt: req.body.prompt,
+      style: "fantasy",
+      layout: "square",
+    })
+    .then(({ data }) => {
+      console.log(data);
+      try {
+        sdk
+          .aiArtGetOrder({ id })
+          .then(({ data }) => {
+            console.log(data);
+            const image_url = data.output[0].preview;
+            console.log(image_url);
+            res.json(image_url);
+          })
+          .catch((err) => console.error(err));
+      } catch (error) {
+        console.log(error);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(400).json(error);
     });
-
-    // Extract the generated image URL from the API response
-    const image_url = response.data.data[0].url;
-    res.json(image_url);
-  } catch (error) {
-    console.error(error);
-    res.status(400).json(error);
-  }
 });
 
 const startServer = async () => {
