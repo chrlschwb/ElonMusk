@@ -5,6 +5,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const path = require("path");
+const axios = require("axios");
 
 const { Configuration, OpenAIApi } = require("openai");
 
@@ -107,15 +108,27 @@ app.get("/logout", async (req, res) => {
 app.post("/generator", async (req, res) => {
   console.log(req.body.prompt);
   try {
-    const response = await openai.createImage({
-      prompt: req.body.prompt,
-      n: 1,
-      size: "256x256",
+    const response = await axios({
+      method: "POST",
+      url: "https://api.openai.com/v1/images/generations",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_KEY}`,
+      },
+      data: {
+        model: "image-alpha-001",
+        prompt: req.body.prompt,
+        num_images: 1,
+        size: "256x256",
+      },
     });
+
+    // Extract the generated image URL from the API response
     const image_url = response.data.data[0].url;
-    return res.json(image_url);
+    res.json(image_url);
   } catch (error) {
-    return res.status(400).json(error);
+    console.error(error);
+    res.status(400).json(error);
   }
 });
 
