@@ -133,7 +133,7 @@ app.post("/generator", async (req, res) => {
               res.json(image_url);
             })
             .catch((err) => console.error(err));
-        }, 60000);
+        }, 50000);
       } catch (error) {
         console.log(error);
       }
