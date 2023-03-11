@@ -2,3 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+.main_background{
+    background-image: url(/src/assets/img/wall1.jpg);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	text-align: center;
+    overflow: hidden;
+}
+.panel_background{
+    background-image: url(/src/assets/img/frame.jpg);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	padding-top: 24px;
+	padding-bottom: 20px;
+	padding-left: 26px;
+	padding-right: 26px;
+    margin-left: 30px;
+	height: 183px;
+	width: 150px;
+}
+
+@font-face {
+  font-family: 'Butcher'; /* Your custom font name */
+  src: url('./assets/font/Butcher.ttf'); /* Path to your font file */
+}
+@font-face {
+  font-family: 'unbutton'; /* Your custom font name */
+  src: url('./assets/font/unbutton.ttf'); /* Path to your font file */
+}
+@font-face {
+  font-family: 'amasingViews'; /* Your custom font name */
+  src: url('./assets/font/AmazingViews.ttf'); /* Path to your font file */
+}
+@font-face {
+  font-family: 'designer'; /* Your custom font name */
+  src: url('./assets/font/Designer.otf'); /* Path to your font file */
+}
+/* Add other font styles you may need */

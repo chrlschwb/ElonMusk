@@ -108,7 +108,6 @@ app.get("/logout", async (req, res) => {
 const sdk = require("api")("@neural-love/v1.0#1dfatt1vlesesd6t");
 
 app.post("/generator", async (req, res) => {
-  console.log(req.body.prompt);
   sdk.auth(process.env.NEURAL_LOVE_KEY);
   sdk
     .aiArtGenerate({
@@ -139,7 +138,7 @@ app.post("/generator", async (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(400).json(error);
+      res.status(400).json(err);
     });
 });
 
